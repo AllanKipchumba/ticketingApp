@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Password } from "../password";
+import { Password } from "../services/password";
 
 //interface describing the properties required to create a new user
 interface UserAttrs {

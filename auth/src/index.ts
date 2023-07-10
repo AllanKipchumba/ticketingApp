@@ -1,6 +1,6 @@
 import express from "express";
 import "express-async-errors";
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 import cookieSession from "cookie-session";
 import { json } from "body-parser";
 import { currentUserRouter } from "./routes/currentUser";
