@@ -4,7 +4,7 @@ import { promisify } from "util";
 //scrypt is call back based. make it promise based
 const scryptAsync = promisify(scrypt);
 
-export class Password {
+export class passwordManager {
   //fn to hash plain text password
   static async toHash(password: string) {
     const salt = randomBytes(8).toString("hex");
@@ -15,7 +15,7 @@ export class Password {
 
   static async compare(storedPassword: string, suppliedPassWord: string) {
     const [hashedPassword, salt] = storedPassword.split(".");
-    const buf = (await scryptAsync(storedPassword, salt, 64)) as Buffer;
+    const buf = (await scryptAsync(suppliedPassWord, salt, 64)) as Buffer;
 
     return buf.toString("hex") === hashedPassword;
   }
