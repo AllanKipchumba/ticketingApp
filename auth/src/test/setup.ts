@@ -7,7 +7,7 @@ declare global {
   var getAuthCookie: () => Promise<string[]>;
 }
 
-//to run before all the tests
+//to run before all the tests -- set up a mondoDB instance
 let mongo: any;
 beforeAll(async () => {
   process.env.JWT_KEY = "asdgfjkl";
@@ -17,7 +17,7 @@ beforeAll(async () => {
   await mongoose.connect(mongoUri);
 });
 
-//to run before each test
+//to run before each test -- clear collections
 beforeEach(async () => {
   const collections = await mongoose.connection.db.collections();
 
@@ -26,7 +26,7 @@ beforeEach(async () => {
   }
 });
 
-//to run after all tests
+//to run after all tests -- stop thr mongoDB istance
 afterAll(async () => {
   if (mongo) {
     await mongo.stop();
@@ -34,6 +34,7 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
+//declares a global function accecible to all test cases
 global.getAuthCookie = async () => {
   const email = "test@test.com";
   const password = "password";
