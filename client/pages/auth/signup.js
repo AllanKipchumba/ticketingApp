@@ -12,7 +12,7 @@ export default () => {
       email,
       password,
     },
-    onSuccess: () => Router.push("/"),
+    onSuccess: () => Router.push("/"), //redirect to homepage on successful request
   });
 
   const onSubmit = async (event) => {
