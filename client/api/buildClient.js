@@ -1,9 +1,9 @@
 import axios from "axios";
 
+//adjusts the base url according to the environment that we are in
 export default ({ req }) => {
   if (typeof window === "undefined") {
     // We are on the server
-
     return axios.create({
       baseURL:
         "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local",
