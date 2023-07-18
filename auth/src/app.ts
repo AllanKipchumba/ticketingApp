@@ -1,13 +1,12 @@
 import express from "express";
 import "express-async-errors";
 import cookieSession from "cookie-session";
+import { errorHandler, NotFoundError } from "@ak-tickets-reuse/common";
 import { json } from "body-parser";
 import { currentUserRouter } from "./routes/currentUser";
 import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";
 import { signupRouter } from "./routes/signup";
-import { errorHandler } from "./middleware/errorHandler";
-import { NotFoundError } from "./errors/notFoundError";
 
 const app = express();
 app.set("trust proxy", true); // make express aware that it is behind ingress nginx
