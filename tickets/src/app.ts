@@ -1,8 +1,13 @@
 import express from "express";
 import "express-async-errors";
 import cookieSession from "cookie-session";
-import { errorHandler, NotFoundError } from "@ak-tickets-reuse/common";
+import {
+  errorHandler,
+  NotFoundError,
+  currentUser,
+} from "@ak-tickets-reuse/common";
 import { json } from "body-parser";
+import { createTicketRouter } from "./routes/new";
 
 const app = express();
 app.set("trust proxy", true); // make express aware that it is behind ingress nginx
@@ -14,6 +19,10 @@ app.use(
     secure: process.env.NODE_ENV !== "test", //ensure traffic comes from a https
   })
 );
+//expose the authenticated user to the routes
+app.use(currentUser);
+
+app.use(createTicketRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();
