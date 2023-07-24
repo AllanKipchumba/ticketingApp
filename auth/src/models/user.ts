@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { passwordManager } from "../services/passwordManager";
 
-//interface describing the properties required to create a new user
+//interface describing the properties required to create a new record
 interface UserAttrs {
   email: string;
   password: string;
@@ -12,13 +12,14 @@ interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
 
-//interface that describes what properties that a single user has
+//interface that describes what properties that a single record has
 interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   createdAt: string;
 }
 
+//define the record schemas
 const userSchema = new mongoose.Schema(
   {
     email: {
@@ -49,10 +50,13 @@ userSchema.pre("save", async function (done) {
     const hashed = await passwordManager.toHash(this.get("password"));
     this.set("password", hashed);
   }
+  done(); //signals the completion of the pre-save middleware operation
 });
 
+//allows TS to do some type checking on the proeerties we are using to create a new record
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
 };
 
+//creates the model
 export const User = mongoose.model<UserDoc, UserModel>("User", userSchema);

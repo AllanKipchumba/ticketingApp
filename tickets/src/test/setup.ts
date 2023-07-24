@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import request from "supertest";
+import jwt from "jsonwebtoken";
 import { app } from "../app";
 
 declare global {
@@ -36,15 +37,24 @@ afterAll(async () => {
 
 //declares a global function accecible to all test cases
 global.getAuthCookie = async () => {
-  const email = "test@test.com";
-  const password = "password";
+  //this service has no access to the signup api. we need to fake authentication
+  //build a jwt payload {id, email}
+  const payload = {
+    id: "aafdfghh",
+    email: "test@test.com",
+  };
+  //create the jwt
+  const token = jwt.sign(payload, process.env.JWT_KEY!);
 
-  const response = await request(app)
-    .post("/api/users/signup")
-    .send({ email, password })
-    .expect(201);
+  //build a session object
+  const session = { jwt: token };
 
-  const cookie = response.get("Set-Cookie");
+  //turn that session into JSON
+  const sessionJSON = JSON.stringify(session);
 
-  return cookie;
+  //Take the json and encode it as base 64
+  const base64 = Buffer.from(sessionJSON).toString("base64");
+
+  //return a string thats a cookie with the encoded data
+  return [`session=${base64}`];
 };
