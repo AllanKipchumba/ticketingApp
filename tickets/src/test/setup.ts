@@ -40,7 +40,7 @@ global.getAuthCookie = async () => {
   //this service has no access to the signup api. we need to fake authentication
   //build a jwt payload {id, email}
   const payload = {
-    id: "aafdfghh",
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
   };
   //create the jwt
