@@ -13,10 +13,18 @@ const stan = nats.connect("ticketing", randomBytes(4).toString("hex"), {
 stan.on("connect", () => {
   console.log("Listener connected to NATS");
 
-  //create a subscription, pass a channel name and a queue group as arguments
+  //run this code when a client receives an interupt
+  stan.on("close", () => {
+    console.log("NATS connection closed!");
+    process.exit();
+  });
+
+  //create a subscription
+  const options = stan.subscriptionOptions().setManualAckMode(true);
   const subscription = stan.subscribe(
-    "ticket:created",
-    "orders-service-queue-group"
+    "ticket:created", //channel
+    "orders-service-queue-group", //queue group
+    options
   );
 
   //listen for new events broadcasted to the channel subscribed
@@ -26,5 +34,12 @@ stan.on("connect", () => {
     if (typeof data === "string") {
       console.log(`Received event #${msg.getSequence()}, with data: ${data}`);
     }
+
+    //acknowledge receiving the message and that it has been processed
+    msg.ack();
   });
 });
+
+//intercept interupt signals to our program
+process.on("SIGINT", () => stan.close());
+process.on("SIGTERM", () => stan.close());
