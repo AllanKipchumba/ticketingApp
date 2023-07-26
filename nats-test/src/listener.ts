@@ -20,7 +20,12 @@ stan.on("connect", () => {
   });
 
   //create a subscription
-  const options = stan.subscriptionOptions().setManualAckMode(true);
+  const options = stan
+    .subscriptionOptions()
+    .setManualAckMode(true) //activates mannual acknowledgment
+    .setDeliverAllAvailable() //gets a list of all events that have beeb emmited in the past
+    .setDurableName("accounting service"); //identifier to ID this subscription
+
   const subscription = stan.subscribe(
     "ticket:created", //channel
     "orders-service-queue-group", //queue group
