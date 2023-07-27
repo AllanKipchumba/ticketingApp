@@ -1,5 +1,6 @@
-import nats, { Message } from "node-nats-streaming";
+import nats from "node-nats-streaming";
 import { randomBytes } from "crypto";
+import { TicketCreatedListner } from "./events/ticket-created-listener";
 
 //clear the console
 console.clear();
@@ -19,30 +20,8 @@ stan.on("connect", () => {
     process.exit();
   });
 
-  //create a subscription
-  const options = stan
-    .subscriptionOptions()
-    .setManualAckMode(true) //activates mannual acknowledgment
-    .setDeliverAllAvailable() //gets a list of all events that have beeb emmited in the past
-    .setDurableName("accounting service"); //identifier to ID this subscription
-
-  const subscription = stan.subscribe(
-    "ticket:created", //channel
-    "orders-service-queue-group", //queue group
-    options
-  );
-
-  //listen for new events broadcasted to the channel subscribed
-  subscription.on("message", (msg: Message) => {
-    const data = msg.getData();
-
-    if (typeof data === "string") {
-      console.log(`Received event #${msg.getSequence()}, with data: ${data}`);
-    }
-
-    //acknowledge receiving the message and that it has been processed
-    msg.ack();
-  });
+  //listen for events
+  new TicketCreatedListner(stan).listen();
 });
 
 //intercept interupt signals to our program

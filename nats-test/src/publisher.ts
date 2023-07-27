@@ -1,26 +1,25 @@
 import nats from "node-nats-streaming";
+import { TiketCreatedPublisher } from "./events/ticket-created-publisher";
 
 //clear the console
 console.clear();
 
-//initiate a NATS client --a nats instance
+//initiate a NATS client
 const stan = nats.connect("ticketing", "abc", {
   url: "http://localhost:4222",
 });
 
-//run what is below when client is connected to the NATS streaming server
-stan.on("connect", () => {
+stan.on("connect", async () => {
   console.log("Publisher connecteed to NATS");
 
-  //create message to share as an event
-  const data = JSON.stringify({
-    id: "123",
-    title: "concerts",
-    price: 20,
-  });
-
-  //publish the event to the specified channel
-  stan.publish("ticket:created", data, () => {
-    console.log("Event published");
-  });
+  const Publisher = new TiketCreatedPublisher(stan);
+  try {
+    await Publisher.publish({
+      id: "123",
+      title: "concerts",
+      price: 20,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
