@@ -35,10 +35,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nats
+  name: nats-srv
 spec:
   selector:
-    app: nats-srv
+    app: nats
   ports:
     - name: client
       protocol: TCP

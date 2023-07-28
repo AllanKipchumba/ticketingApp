@@ -7,6 +7,8 @@ import {
   NotAuthorizedError,
 } from "@ak-tickets-reuse/common";
 import { Ticket } from "../models/tickets";
+import { TicketUpdatedPublisher } from "./../events/publishers/ticket-updated";
+import { natsWrapper } from "../nats-wrapper/nats-wrapper";
 
 const router = express.Router();
 
@@ -19,6 +21,7 @@ router.put(
       .isFloat({ gt: 0 }) //gt: greater than
       .withMessage("Proce must be provided and must be greater than 0"),
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
     const ticket = await Ticket.findById(req.params.id);
 
@@ -37,6 +40,14 @@ router.put(
     });
 
     await ticket.save();
+
+    //publish the update event to NATS
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userID: ticket.userID,
+    });
 
     res.send(ticket);
   }
