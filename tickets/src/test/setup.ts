@@ -1,12 +1,13 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import request from "supertest";
 import jwt from "jsonwebtoken";
-import { app } from "../app";
 
 declare global {
   var getAuthCookie: () => Promise<string[]>;
 }
+
+//mock nats-wrapper
+jest.mock("../nats-wrapper.ts");
 
 //to run before all the tests -- set up a mondoDB instance
 let mongo: any;
@@ -20,6 +21,7 @@ beforeAll(async () => {
 
 //to run before each test -- clear collections
 beforeEach(async () => {
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {

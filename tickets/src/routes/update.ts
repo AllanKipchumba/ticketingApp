@@ -8,7 +8,7 @@ import {
 } from "@ak-tickets-reuse/common";
 import { Ticket } from "../models/tickets";
 import { TicketUpdatedPublisher } from "./../events/publishers/ticket-updated";
-import { natsWrapper } from "../nats-wrapper/nats-wrapper";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
