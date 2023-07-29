@@ -1,19 +1,23 @@
 import mongoose from "mongoose";
+import { OrderStatus } from "@ak-tickets-reuse/common";
+import { TicketDoc } from "./ticket";
 
-//desribes the properties required to create a new record
+export { OrderStatus };
+
+//desribes the properties required to create a new order
 interface OrderAttrs {
   userID: string;
-  status: string;
+  status: OrderStatus;
   expiresAt: Date;
-  ticket: TIcketDoc;
+  ticket: TicketDoc;
 }
 
-//describes the properties that a single record has
+//describes the properties that a single order has
 interface OrderDoc extends mongoose.Document {
   userID: string;
-  status: string;
+  status: OrderStatus;
   expiresAt: Date;
-  ticket: TIcketDoc;
+  ticket: TicketDoc;
 }
 
 //describes what the model has
@@ -30,6 +34,8 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       require: true,
+      enum: Object.values(OrderStatus),
+      default: OrderStatus.Created,
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
@@ -54,3 +60,5 @@ orderSchema.statics.build = (attrs: OrderAttrs) => {
 };
 
 const Order = mongoose.model<OrderDoc, OrderModel>("Order", orderSchema);
+
+export { Order };
