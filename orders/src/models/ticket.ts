@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Order, OrderStatus } from "./order";
+
 interface TicketAttrs {
   title: string;
   price: number;
