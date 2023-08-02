@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+// import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { Order, OrderStatus } from "./order";
 
 interface TicketAttrs {
@@ -10,11 +11,16 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  version: number;
   isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc;
+  findByIdAndPreviousVersion(event: {
+    id: string;
+    version: number;
+  }): Promise<TicketDoc | null>;
 }
 
 const ticketSchema = new mongoose.Schema(
@@ -39,12 +45,39 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
+//updates a record if the current version number is less 1 the incoming version number
+ticketSchema.set("versionKey", "version");
+// ticketSchema.plugin(updateIfCurrentPlugin); //auto implementation
+
+//MANUAL IMPLEMENTATION
+/**this code runs before a save operation is effected
+ *  checks whether there exists a document with a version
+ *  exactly one less than the current document's version.
+ * If such a document is found, the current document can be saved
+ */
+ticketSchema.pre("save", function () {
+  this.$where = {
+    version: this.get("version") - 1,
+  };
+});
+//
+
 //enable TS to typcheck the attrs we use to build a record
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket({
     _id: attrs.id,
     title: attrs.title,
     price: attrs.price,
+  });
+};
+
+ticketSchema.statics.findByIdAndPreviousVersion = (event: {
+  id: string;
+  version: number;
+}) => {
+  return Ticket.findOne({
+    _id: event.id,
+    version: event.version - 1,
   });
 };
 

@@ -49,9 +49,8 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
-// configure updateIfCurrentPlugin to solve OCC - optimistic concurrency control
 ticketSchema.set("versionKey", "version");
-ticketSchema.plugin(updateIfCurrentPlugin);
+ticketSchema.plugin(updateIfCurrentPlugin); //track versioning
 
 //allows TS to do some type checking on the properties we are using to create a new record
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
