@@ -1,4 +1,4 @@
-import { natsWrapper } from "./../../../tickets/src/nats-wrapper";
+import { natsWrapper } from "../nats-wrapper";
 import express, { Request, Response } from "express";
 import { Order } from "../models/order";
 import {

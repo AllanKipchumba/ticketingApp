@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
+import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
+import { TicketUpdateListener } from "./events/listeners/ticket-updated-listener";
 
 const start = async () => {
   //ensure env vars are provided by concerned containers
@@ -43,6 +45,10 @@ const start = async () => {
     });
     process.on("SIGINT", () => natsWrapper.client!.close());
     process.on("SIGTERM", () => natsWrapper.client!.close());
+
+    //listen for traffic published to the channels the service is subscribed to
+    new TicketCreatedListener(natsWrapper.client).listen();
+    new TicketUpdateListener(natsWrapper.client).listen();
 
     //initiate database connection
     await mongoose.connect(process.env.MONGO_URI);
