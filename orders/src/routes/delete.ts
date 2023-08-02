@@ -1,3 +1,4 @@
+import { natsWrapper } from "./../../../tickets/src/nats-wrapper";
 import express, { Request, Response } from "express";
 import { Order } from "../models/order";
 import {
@@ -6,6 +7,7 @@ import {
   OrderStatus,
   requireAuth,
 } from "@ak-tickets-reuse/common";
+import { OrderCancelledPublisher } from "./../events/publishers/order-cancelled-event";
 
 const router = express.Router();
 
@@ -15,7 +17,7 @@ router.delete(
   async (req: Request, res: Response) => {
     const { orderId } = req.params;
 
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate("ticket");
 
     if (!order) {
       throw new NotFoundError();
@@ -31,7 +33,13 @@ router.delete(
 
     res.status(204).send(order);
 
-    //publiah an event saying this order was cancelled
+    //publish an event saying this order was cancelled
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
   }
 );
 

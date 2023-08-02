@@ -8,6 +8,7 @@ import nats, { Stan } from "node-nats-streaming";
 class NatsWrapper {
   private _client?: Stan;
 
+  //to be exposed to publishers and listeners
   get client() {
     if (!this._client) {
       throw new Error("Cannot access NATS client before connecting");
@@ -16,6 +17,7 @@ class NatsWrapper {
     return this._client;
   }
 
+  //the connect method to be exposed to index.js to connect to NATS
   connect(clusterId: string, clientId: string, url: string) {
     this._client = nats.connect(clusterId, clientId, { url });
 
