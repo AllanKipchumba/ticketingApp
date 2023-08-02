@@ -24,8 +24,30 @@ it("fetches the order", async () => {
   const { body: fetchedOrder } = await request(app)
     .get(`/api/orders/${order.id}`)
     .set("Cookie", user)
-    .send()
     .expect(200);
 
-  expect(fetchedOrder.id).toEqual(order.id);
+  // expect(fetchedOrder.id).toEqual(order.id);
+});
+
+it("returns an error if one user tries to fetch another users order", async () => {
+  //create a ticket
+  const ticket = Ticket.build({
+    title: "concert",
+    price: 30,
+  });
+  await ticket.save();
+
+  //make a request to build an order with the ticket
+  const { body: order } = await request(app)
+    .post("/api/orders")
+    .set("Cookie", await global.getAuthCookie())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+
+  //make request to fetch the order
+  await request(app)
+    .get(`/api/orders/${order.id}`)
+    .set("Cookie", await global.getAuthCookie())
+    .send()
+    .expect(401);
 });

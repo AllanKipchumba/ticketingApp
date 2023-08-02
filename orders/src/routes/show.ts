@@ -4,28 +4,27 @@ import {
   requireAuth,
   validateRequest,
 } from "@ak-tickets-reuse/common";
-import { param } from "express-validator";
-import mongoose from "mongoose";
+// import { param } from "express-validator";
+// import mongoose from "mongoose";
 import express, { Request, Response } from "express";
 import { Order } from "../models/order";
 
 const router = express.Router();
 
-const isValidObjectId = (input: string) =>
-  mongoose.Types.ObjectId.isValid(input);
-const validateObjectId = param("")
-  .not()
-  .isEmpty()
-  .custom(isValidObjectId)
-  .withMessage("Order must be a valid ObjectId");
+// const isValidObjectId = (input: string) =>
+//   mongoose.Types.ObjectId.isValid(input);
+// const validateObjectId = param("")
+//   .not()
+//   .isEmpty()
+//   .custom(isValidObjectId)
+//   .withMessage("Order must be a valid ObjectId");
 
 router.get(
   "/api/orders/:orderId",
   requireAuth,
-  validateObjectId,
   validateRequest,
   async (req: Request, res: Response) => {
-    const order = await Order.findById({ _id: req.params.orderId });
+    const order = await Order.findById(req.params.orderId);
 
     if (!order) {
       throw new NotFoundError();

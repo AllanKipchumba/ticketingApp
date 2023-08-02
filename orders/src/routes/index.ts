@@ -5,6 +5,7 @@ import { Order } from "../models/order";
 const router = express.Router();
 
 router.get("/api/orders", requireAuth, async (req: Request, res: Response) => {
+  //shows all the orders belonging to a particular user
   const orders = await Order.find({
     userID: req.currentUser!.id,
   }).populate("ticket");
