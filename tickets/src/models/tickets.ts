@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 //desribes the properties required to create a new record
 interface TicketAttrs {
@@ -12,6 +13,7 @@ interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
   userID: string;
+  version: number;
 }
 
 //describes what the model has
@@ -46,6 +48,10 @@ const ticketSchema = new mongoose.Schema(
     },
   }
 );
+
+// configure updateIfCurrentPlugin to solve OCC - optimistic concurrency control
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 //allows TS to do some type checking on the properties we are using to create a new record
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
