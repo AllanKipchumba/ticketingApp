@@ -7,7 +7,7 @@ interface Payload {
 }
 
 //enqueue the job insid redis
-const expirationQueue = new Queue<Payload>("orde:expiration", {
+const expirationQueue = new Queue<Payload>("order:expiration", {
   redis: {
     host: process.env.REDIS_HOST,
   },
