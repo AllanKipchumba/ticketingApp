@@ -52,7 +52,7 @@ ticketSchema.set("versionKey", "version");
 //MANUAL IMPLEMENTATION
 /**this code runs before a save operation is effected
  *  checks whether there exists a document with a version
- *  exactly one less than the current document's version.
+ *  exactly one less than the incoming document's version.
  * If such a document is found, the current document can be saved
  */
 ticketSchema.pre("save", function () {

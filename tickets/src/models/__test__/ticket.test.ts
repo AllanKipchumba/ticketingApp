@@ -22,7 +22,7 @@ it("implements optimistic concurrecy control", async () => {
   //save the first fetched ticket
   await firstInstance?.save();
 
-  //save the second fethed ticket and expect an error
+  //save the second fetched ticket and expect an error
   try {
     await secondInstance?.save();
   } catch (error) {
