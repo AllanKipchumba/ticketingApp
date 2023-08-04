@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ak-tickets-reuse/common": "^1.0.17",
+    "@ak-tickets-reuse/common": "^1.0.18",
     "@types/bull": "^4.10.0",
     "bull": "^4.10.4",
     "node-nats-streaming": "^0.3.2",
