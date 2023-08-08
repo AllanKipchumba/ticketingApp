@@ -7,6 +7,7 @@ import {
   currentUser,
 } from "@ak-tickets-reuse/common";
 import { json } from "body-parser";
+import { createChargeRouter } from "./routes/new";
 
 const app = express();
 app.set("trust proxy", true); // make express aware that it is behind ingress nginx
@@ -20,6 +21,8 @@ app.use(
 );
 //expose the authenticated user to the routes
 app.use(currentUser);
+
+app.use(createChargeRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();
