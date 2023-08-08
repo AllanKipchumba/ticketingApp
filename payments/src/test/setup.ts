@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
 declare global {
-  var getAuthCookie: () => Promise<string[]>;
+  var getAuthCookie: (id?: string) => Promise<string[]>;
 }
 
 //mock nats-wrapper
@@ -38,11 +38,11 @@ afterAll(async () => {
 });
 
 //declares a global function accecible to all test cases
-global.getAuthCookie = async () => {
+global.getAuthCookie = async (id?: string) => {
   //this service has no access to the signup api. we need to fake authentication
   //build a jwt payload {id, email}
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
   };
   //create the jwt
