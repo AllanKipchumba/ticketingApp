@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
+import { OrderCancelledListener } from "./events/listeners/order-cancelled-listener";
 
 const start = async () => {
   //ensure env vars are provided by concerned containers
@@ -43,6 +45,10 @@ const start = async () => {
     });
     process.on("SIGINT", () => natsWrapper.client!.close());
     process.on("SIGTERM", () => natsWrapper.client!.close());
+
+    //Listen for events published to the channels the service is subscribed to
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
 
     //initiate database connection
     await mongoose.connect(process.env.MONGO_URI);
