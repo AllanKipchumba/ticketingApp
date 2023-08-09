@@ -5,6 +5,7 @@ import { natsWrapper } from "./nats-wrapper";
 import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
 import { TicketUpdateListener } from "./events/listeners/ticket-updated-listener";
 import { ExpirationCompleteListener } from "./events/listeners/expiration-complete-listener";
+import { PaymentCreatedListener } from "./events/listeners/payment-created-listener";
 
 const start = async () => {
   //ensure env vars are provided by concerned containers
@@ -51,6 +52,7 @@ const start = async () => {
     new TicketCreatedListener(natsWrapper.client).listen();
     new TicketUpdateListener(natsWrapper.client).listen();
     new ExpirationCompleteListener(natsWrapper.client).listen();
+    new PaymentCreatedListener(natsWrapper.client).listen();
 
     //initiate database connection
     await mongoose.connect(process.env.MONGO_URI);

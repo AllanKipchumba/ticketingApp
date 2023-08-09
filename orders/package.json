@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ak-tickets-reuse/common": "^1.0.18",
+    "@ak-tickets-reuse/common": "^1.0.20",
     "@types/cookie-session": "^2.0.44",
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.2",
