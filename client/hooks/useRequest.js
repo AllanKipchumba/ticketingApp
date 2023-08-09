@@ -7,6 +7,7 @@ export default ({ url, method, body, onSuccess }) => {
   const doRequest = async () => {
     try {
       setErrors(null);
+      //axios[method] looks up at axios for the appropriate method
       const response = await axios[method](url, body);
 
       if (onSuccess) {
