@@ -13,12 +13,15 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
   );
 };
 
-//makes the request to fetch the current user
 AppComponent.getInitialProps = async (appContext) => {
+  //makes the request to fetch the current user
   const client = buildClient(appContext.ctx);
   const { data } = await client.get("/api/users/currentuser");
 
-  //expose the build client method and current user to child components
+  /*
+   * exposes the build client method and current user to getinitial props
+   * in the child components
+   */
   let pageProps = {};
   if (appContext.Component.getInitialProps) {
     pageProps = await appContext.Component.getInitialProps(
