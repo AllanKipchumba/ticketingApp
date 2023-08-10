@@ -1,4 +1,4 @@
-name: tests
+name: test-payments
 
 on: pull_request
 
@@ -11,6 +11,6 @@ jobs:
 
       - name: Install and Test
         run: |
-          cd auth
+          cd payments
           npm install
           npm run test:ci
