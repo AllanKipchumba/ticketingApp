@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-// import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { Order, OrderStatus } from "./order";
 
 interface TicketAttrs {
@@ -47,7 +47,7 @@ const ticketSchema = new mongoose.Schema(
 
 //updates a record if the current version number is less 1 the incoming version number
 ticketSchema.set("versionKey", "version");
-// ticketSchema.plugin(updateIfCurrentPlugin); //auto implementation
+ticketSchema.plugin(updateIfCurrentPlugin); //auto implementation
 
 //MANUAL IMPLEMENTATION
 /**this code runs before a save operation is effected
@@ -55,11 +55,11 @@ ticketSchema.set("versionKey", "version");
  *  exactly one less than the incoming document's version.
  * If such a document is found, the current document can be saved
  */
-ticketSchema.pre("save", function () {
-  this.$where = {
-    version: this.get("version") - 1,
-  };
-});
+// ticketSchema.pre("save", function () {
+//   this.$where = {
+//     version: this.get("version") - 1,
+//   };
+// });
 //
 
 //enable TS to typcheck the attrs we use to build a record
@@ -95,6 +95,7 @@ ticketSchema.methods.isReserved = async function () {
     },
   });
 
+  //double exclamation mark converts the existingOrder object to a boolean
   return !!existingOrder;
 };
 
