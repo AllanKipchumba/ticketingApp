@@ -1,0 +1,18 @@
+name: test-tickets
+
+on:
+  pull_request:
+    paths:
+      - "tickets/**"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install and Test
+        run: |
+          cd tickets
+          npm install
+          npm run test:ci

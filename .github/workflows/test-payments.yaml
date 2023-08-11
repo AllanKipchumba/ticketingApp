@@ -1,0 +1,26 @@
+name: test-payments
+
+on:
+  pull_request:
+    paths:
+      - "payments/**"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up environment variables
+        run: |
+          echo "STRIPE_KEY=${{ secrets.STRIPE_KEY }}" >> $GITHUB_ENV
+
+      - name: Debug Stripe Key
+        run: |
+          echo "STRIPE_KEY value: $STRIPE_KEY"
+
+      - name: Install and Test
+        run: |
+          cd payments
+          npm install
+          npm run test:ci
