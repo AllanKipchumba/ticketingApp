@@ -1,6 +1,6 @@
 # Ticketing App - Microservices-based Application
 
-Welcome to the Ticketing App repository! This project is a microservices-based application designed to facilitate the buying and selling of tickets on its platform. The application is comprised of several services, each serving a specific purpose in the ticketing process. The services are containerized and orchestrated using Kubernetes, and communication between them is achieved through a stream of events provided by the NATS Streaming Server message queue system.
+This project is a microservices-based application designed to facilitate the buying and selling of tickets on its platform. The application is comprised of several services, each serving a specific purpose in the ticketing process. The services are containerized and orchestrated using Kubernetes, and communication between them is achieved through a stream of events provided by the NATS Streaming Server message queue system.
 
 ## Services Overview
 
@@ -24,4 +24,4 @@ Welcome to the Ticketing App repository! This project is a microservices-based a
 
 - **NATS Streaming Server**: NATS Streaming Server provides the underlying messaging infrastructure for the stream of events that allow communication between services.
 
-Thank you for your interest in the Ticketing App! We hope you find this microservices-based application informative and useful for understanding the architecture and technologies involved. If you have any further questions or need assistance, please don't hesitate to reach out.
+Thank you for your interest in the Ticketing App! I hope you find this microservices-based application informative and useful for understanding the architecture and technologies involved. If you have any further questions or need assistance, please don't hesitate to reach out.
