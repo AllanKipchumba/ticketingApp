@@ -24,4 +24,6 @@ This project is a microservices-based application designed to facilitate the buy
 
 - **NATS Streaming Server**: NATS Streaming Server provides the underlying messaging infrastructure for the stream of events that allow communication between services.
 
+- **CI/CD with GitHub Actions**: Continuous Integration and Continuous Deployment (CI/CD) operations for this project are managed by GitHub Actions. Automated workflows ensure that changes are tested, built, and deployed seamlessly.
+
 Thank you for your interest in the Ticketing App! I hope you find this microservices-based application informative and useful for understanding the architecture and technologies involved. If you have any further questions or need assistance, please don't hesitate to reach out.
